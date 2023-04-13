@@ -6,6 +6,27 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement()) //autoincrement 자동으로 id 생성
+  account String @unique
+  name String? 
+  todos Todo[]
+  createdAt DateTime @default(now()) //now 현재 시각
+  updatedAt DateTime @updatedAt
+}
+
+model Todo {
+  id Int @id @default(autoincrement())
+  todo String
+  isDone Boolean
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId]) // mysql 사용시 써줘야함
 }
