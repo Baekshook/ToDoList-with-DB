@@ -8,14 +8,16 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
+
 model User {
-  id Int @id @default(autoincrement()) //autoincrement 자동으로 id 생성
+  id Int @id @default(autoincrement())
   account String @unique
-  name String? 
+  name String?
   todos Todo[]
-  createdAt DateTime @default(now()) //now 현재 시각
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
@@ -27,6 +29,5 @@ model Todo {
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([userId]) // mysql 사용시 써줘야함
+  @@index([userId])
 }
