@@ -69,6 +69,34 @@ router.get("/:userId", async (req, res) => {
 });
 
 // 투두 완료
+router.put("/:id/done", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existTodo = await client.todo.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!existTodo) {
+      return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+
+    const updatedTodo = await client.todo.update({
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        isDone: !existTodo.isDone,
+      },
+    });
+
+    res.json({ ok: true, todo: updatedTodo });
+  } catch (error) {
+    console.error(error);
+  }
+});
 // 투두 삭제
 
 module.exports = router;
