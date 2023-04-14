@@ -3,32 +3,42 @@ const { PrismaClient } = require("@prisma/client");
 
 const router = express.Router();
 
-const prisma = new PrismaClient();
+const client = new PrismaClient();
 
-// 신규 유저 생성
+// 유저생성
 router.post("/", async (req, res) => {
   try {
-    const user = await prisma.user.create({
+    const { account } = req.body;
+
+    const existUser = await client.user.findUnique({
+      where: {
+        account,
+      },
+    });
+    if (existUser) {
+      return res
+        .status(400)
+        .json({ ok: false, error: "Already exist account." });
+    }
+
+    const user = await client.user.create({
       data: {
-        account: "abcd",
+        account,
       },
     });
 
-    res.json({
-      ok: true,
-      user,
-    });
+    res.json({ ok: true, user });
   } catch (error) {
     console.error(error);
   }
 });
 
-// 유저 조회
-router.get("/", async (req, res) => {
+// 유저조회
+router.get("/:account", async (req, res) => {
   try {
-    const { account } = req.body;
+    const { account } = req.params;
 
-    const user = await prisma.user.findUnique({
+    const user = await client.user.findUnique({
       where: {
         account,
       },
@@ -37,7 +47,7 @@ router.get("/", async (req, res) => {
     if (!user) {
       return res.status(400).json({
         ok: false,
-        error: "Not exist account.",
+        error: "Not exist user.",
       });
     }
 
