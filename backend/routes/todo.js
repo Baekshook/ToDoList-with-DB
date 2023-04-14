@@ -72,6 +72,7 @@ router.get("/:userId", async (req, res) => {
 router.put("/:id/done", async (req, res) => {
   try {
     const { id } = req.params;
+    const { userId } = req.body;
 
     const existTodo = await client.todo.findUnique({
       where: {
@@ -81,6 +82,9 @@ router.put("/:id/done", async (req, res) => {
 
     if (!existTodo) {
       return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+    if (existTodo.userId !== parseInt(userId)) {
+      return res.status(400).json({ ok: false, error: "U R not todo owner." });
     }
 
     const updatedTodo = await client.todo.update({
@@ -97,6 +101,36 @@ router.put("/:id/done", async (req, res) => {
     console.error(error);
   }
 });
+
 // 투두 삭제
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId } = req.body;
+
+    const existTodo = await client.todo.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    if (!existTodo) {
+      return res.status(400).json({ ok: false, error: "Not exist todo." });
+    }
+    if (existTodo.userId !== parseInt(userId)) {
+      return res.status(400).json({ ok: false, error: "U R not todo owner." });
+    }
+
+    const deletedTodo = await client.todo.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+
+    res.json({ ok: true, todo: deletedTodo });
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 module.exports = router;
