@@ -88,7 +88,15 @@ function App() {
       <div>
         {todos &&
           todos.map((v, i) => {
-            return <TodoCard key={i} todo={v.todo} isDone={v.isDone} />;
+            return (
+              <TodoCard
+                key={i}
+                todo={v.todo}
+                isDone={v.isDone}
+                id={v.id}
+                userId={user.id}
+              />
+            );
           })}
       </div>
     </div>

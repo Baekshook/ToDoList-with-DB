@@ -7,6 +7,7 @@ export default function CreateTodo({ userId, setTodos, todos }) {
   const onSubmitCreateTodo = async (e) => {
     try {
       e.preventDefault();
+
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/todo`,
         {
@@ -19,10 +20,10 @@ export default function CreateTodo({ userId, setTodos, todos }) {
       setTodo("");
     } catch (error) {
       console.error(error);
-      alert("Todo 생성 중 에러가 발생하였습니다.");
+
+      alert("투두 생성중 에러가 발생하였습니다.");
     }
   };
-
   return (
     <form className="flex mt-2" onSubmit={onSubmitCreateTodo}>
       <input
