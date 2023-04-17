@@ -7,16 +7,18 @@ import axios from "axios";
 function App() {
   const [user, setUser] = useState();
   const [todos, setTodos] = useState();
+  const [skip, setSkip] = useState(0);
 
   const getTodos = async () => {
     try {
       if (!user) return;
 
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}/todo/${user.id}`
+        `${process.env.REACT_APP_BACKEND_URL}/todo/${user.id}?skip=${skip}`
       );
 
       setTodos(response.data.todos);
+      setSkip(skip + 3);
     } catch (error) {
       console.error(error);
 
@@ -26,6 +28,21 @@ function App() {
 
   const onClickLogOut = () => {
     setUser(undefined);
+  };
+
+  const onClickReload = async () => {
+    try {
+      if (!user) return;
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/todo/${user.id}?skip=${skip}`
+      );
+
+      setTodos([...todos, ...response.data.todos]);
+      setSkip(skip + 3);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -58,12 +75,22 @@ function App() {
           나무 베는데 한 시간이 주어진다면, 도끼를 가는데 45분을 쓰겠다,
           에비브러햄 링컨
         </div>
-        <CreateTodo userId={user.id} setTodos={setTodos} todos={todos}/>
+        <CreateTodo userId={user.id} setTodos={setTodos} todos={todos} />
       </div>
-      {todos &&
-        todos.map((v, i) => {
-          return <TodoCard key={i} todo={v.todo} isDone={v.isDone} />;
-        })}
+      <div className="mt-16">
+        <button
+          className="ml-4 px-4 py-2 bg-pink-200 hover:bg-pink-400 rounded-lg text-gray-50 text-2xl"
+          onClick={onClickReload}
+        >
+          갱 신
+        </button>
+      </div>
+      <div>
+        {todos &&
+          todos.map((v, i) => {
+            return <TodoCard key={i} todo={v.todo} isDone={v.isDone} />;
+          })}
+      </div>
     </div>
   );
 }

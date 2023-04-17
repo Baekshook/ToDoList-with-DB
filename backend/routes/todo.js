@@ -45,6 +45,7 @@ router.post("/", async (req, res) => {
 router.get("/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
+    const { skip } = req.query;
 
     const user = await client.user.findUnique({
       where: {
@@ -63,7 +64,7 @@ router.get("/:userId", async (req, res) => {
       orderBy: {
         createdAt: "desc",
       },
-      skip: 0,
+      skip: parseInt(skip),
       take: 3,
     });
 
