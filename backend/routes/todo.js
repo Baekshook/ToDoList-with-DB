@@ -60,6 +60,9 @@ router.get("/:userId", async (req, res) => {
       where: {
         userId: parseInt(userId),
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     res.json({ ok: true, todos });
