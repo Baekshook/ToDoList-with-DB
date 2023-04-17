@@ -5,12 +5,12 @@ function App() {
   const [user, setUser] = useState();
 
   if (!user) {
-    return <Login />;
+    return <Login setUser={setUser}/>;
   }
 
   return (
     <div className="min-h-screen flex flex-col justify-start items-center pt-16">
-      <h1 className="text-4xl font-bold">AWESOME TO DO LIST 😎</h1>
+      <h1 className="text-4xl font-bold">{user.account}님 환영합니다! 😎</h1>
       <div>
         <div className="mt-8 text-sm font-semibold">
           If I only had an hour to chop down a tree, I would spend the first 45
