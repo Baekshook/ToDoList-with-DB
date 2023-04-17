@@ -15,7 +15,7 @@ export default function CreateTodo({ userId, setTodos, todos }) {
         }
       );
 
-      setTodos([...todos, response.data.todo]);
+      setTodos([response.data.todo, ...todos]);
       setTodo("");
     } catch (error) {
       console.error(error);

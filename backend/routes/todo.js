@@ -63,6 +63,8 @@ router.get("/:userId", async (req, res) => {
       orderBy: {
         createdAt: "desc",
       },
+      skip: 0,
+      take: 3,
     });
 
     res.json({ ok: true, todos });
