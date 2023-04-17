@@ -95,6 +95,8 @@ function App() {
                 isDone={v.isDone}
                 id={v.id}
                 userId={user.id}
+                todos={todos}
+                setTodos={setTodos}
               />
             );
           })}
