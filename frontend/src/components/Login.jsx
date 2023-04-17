@@ -27,8 +27,16 @@ const Login = ({ setUser }) => {
   const onSubmitLogIn = async (e) => {
     try {
       e.preventDefault();
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/user/${account}`
+      );
+
+      setUser(response.data.user);
     } catch (error) {
       console.error(error);
+
+      alert("로그인에 실패하였습니다.");
     }
   };
 
