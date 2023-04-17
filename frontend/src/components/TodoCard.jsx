@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { FiTrash2 } from "react-icons/fi";
 
 const TodoCard = ({ todo, isDone, id, userId }) => {
   const [todoIsDone, setTodoIsDone] = useState(isDone);
@@ -35,6 +36,9 @@ const TodoCard = ({ todo, isDone, id, userId }) => {
         ></button>
       )}
       <div className="text-2xl ml-4 truncate">{todo}</div>
+      <button className="ml-10 hover:text-pink-400 hover:scale-125 ease-linear duration-100">
+        <FiTrash2 size={24}/>
+      </button>
     </div>
   );
 };
