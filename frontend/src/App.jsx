@@ -71,7 +71,7 @@ function App() {
       </div>
       {todos &&
         todos.map((v, i) => {
-          return <TodoCard key={i} />;
+          return <TodoCard key={i} todo={v.todo} isDone={v.isDone} />;
         })}
     </div>
   );
