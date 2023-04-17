@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./components/Login";
+import TodoCard from "./components/TodoCard";
+import axios from "axios";
 
 function App() {
   const [user, setUser] = useState();
+  const [todos, setTodos] = useState();
+
+  const getTodos = async () => {
+    try {
+      if (!user) return;
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/todo/${user.id}`
+      );
+
+      setTodos(response.data.todos);
+    } catch (error) {
+      console.error(error);
+
+      alert("투두 리스트를 불러오지 못했습니다.");
+    }
+  };
 
   const onClickLogOut = () => {
     setUser(undefined);
   };
+
+  useEffect(() => {
+    // 투두리스트 가져오기
+    getTodos();
+    console.log(user);
+  }, [user]);
 
   if (!user) {
     return <Login setUser={setUser} />;
@@ -44,19 +69,10 @@ function App() {
           />
         </form>
       </div>
-      <div className="mt-16 flex flex-col w-1/2">
-        <div className="flex my-4">
-          <div className="border-4 border-pink-400 w-8 h-8 rounded-xl"></div>
-          <div className="text-2xl ml-4 truncate">🧹 청소하기</div>
-        </div>
-        <div className="flex my-4">
-          <div className="relative">
-            <div className="border-4 border-pink-400 w-8 h-8 rounded-xl bg-pink-400 p-2"></div>
-            <div className="absolute border-4 border-white top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-8 h-8 scale-75 rounded-xl bg-pink-400 p-2"></div>
-          </div>
-          <div className="text-2xl ml-4 truncate">👕 빨래하기</div>
-        </div>
-      </div>
+      {todos &&
+        todos.map((v, i) => {
+          return <TodoCard key={i} />;
+        })}
     </div>
   );
 }
