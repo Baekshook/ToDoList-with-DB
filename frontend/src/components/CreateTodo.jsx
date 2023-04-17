@@ -1,24 +1,22 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function CreateTodo({ userId }) {
+export default function CreateTodo({ userId, getTodos }) {
   const [todo, setTodo] = useState("");
 
   const onSubmitCreateTodo = async (e) => {
     try {
       e.preventDefault();
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/todo`, {
+        todo,
+        userId,
+      });
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/todo`,
-        {
-          todo,
-          userId,
-        }
-      );
-
-      console.log(response);
+      getTodos();
+      setTodo("");
     } catch (error) {
       console.error(error);
+      alert("Todo 생성 중 에러가 발생하였습니다.");
     }
   };
 
@@ -35,7 +33,7 @@ export default function CreateTodo({ userId }) {
       <input
         className="ml-4 px-2 py-1 bg-pink-400 rounded-lg text-gray-50"
         type="submit"
-        value="새 투두 생성"
+        value="새 Todo 생성"
       />
     </form>
   );

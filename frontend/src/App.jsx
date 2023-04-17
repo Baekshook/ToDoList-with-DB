@@ -20,7 +20,7 @@ function App() {
     } catch (error) {
       console.error(error);
 
-      alert("투두 리스트를 불러오지 못했습니다.");
+      alert("Todo 리스트를 불러오지 못했습니다.");
     }
   };
 
@@ -58,7 +58,7 @@ function App() {
           나무 베는데 한 시간이 주어진다면, 도끼를 가는데 45분을 쓰겠다,
           에비브러햄 링컨
         </div>
-        <CreateTodo userId={user.id}/>
+        <CreateTodo userId={user.id} getTodos={getTodos} />
       </div>
       {todos &&
         todos.map((v, i) => {
